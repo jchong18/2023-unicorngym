@@ -5,10 +5,9 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, HttpIntegration, LambdaIntegration, MethodLoggingLevel, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 
 export class LambdaCdkAppStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, restApi: RestApi, props?: StackProps) {
     super(scope, id, props);
 
     const orderTablePrimaryKey = 'OrderId';
@@ -53,15 +52,7 @@ export class LambdaCdkAppStack extends Stack {
     const listOrderIntegration = new LambdaIntegration(listOrderLambda);
     // const deleteOrderIntegration = new LambdaIntegration(deleteOrderLambda);
 
-    const api = new RestApi(this, 'OrderApi', {
-      restApiName: 'AnyHouse Service',
-      deployOptions: {
-        loggingLevel: MethodLoggingLevel.INFO,
-        metricsEnabled: true,
-      }
-    })
-
-    const order = api.root.addResource('order');
+    const order = restApi.root.addResource('order');
     order.addMethod('GET', listOrderIntegration);
     order.addMethod('POST', createOrderIntegration);
 
@@ -125,7 +116,7 @@ export class LambdaCdkAppStack extends Stack {
       }
     );
 
-    const cart = api.root.addResource('cart');
+    const cart = restApi.root.addResource('cart');
     cart.addMethod('POST', createCartIntegration);
     cart.addCorsPreflight({
       allowOrigins: Cors.ALL_ORIGINS,

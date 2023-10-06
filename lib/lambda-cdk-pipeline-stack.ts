@@ -4,6 +4,7 @@ import { CodePipeline, CodePipelineSource, ShellStep } from 'aws-cdk-lib/pipelin
 import { LambdaCdkAppStack } from './lambda-cdk-app-stack';
 import { Repository } from 'aws-cdk-lib/aws-codecommit';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { ApiGatewayStack } from './api-gateway-stack';
 
 export class LambdaCdkPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -52,7 +53,8 @@ export class LambdaCdkPipelineStack extends Stack {
 class LambdaCdkAppStage extends Stage {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
-    const LambdaStack = new LambdaCdkAppStack(this, 'LambdaCdkStack', {
+    const ApiStack = new ApiGatewayStack(this, 'ApiGatewayStack', {});
+    const LambdaStack = new LambdaCdkAppStack(this, 'LambdaCdkStack', ApiStack.restApi, {
     });
   }
 }
