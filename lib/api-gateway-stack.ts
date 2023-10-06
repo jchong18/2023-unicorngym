@@ -8,7 +8,7 @@ export class ApiGatewayStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    this.restApi = new RestApi(this, 'OrderApi', {
+    this.restApi = new RestApi(this, 'Api', {
       restApiName: 'AnyHouse Service',
       deployOptions: {
         loggingLevel: MethodLoggingLevel.INFO,
