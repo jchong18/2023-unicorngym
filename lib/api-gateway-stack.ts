@@ -14,6 +14,6 @@ export class ApiGatewayStack extends Stack {
         loggingLevel: MethodLoggingLevel.INFO,
         metricsEnabled: true,
       }
-    })
+    });
   }
 }

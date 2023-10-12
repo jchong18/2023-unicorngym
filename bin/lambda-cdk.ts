@@ -1,13 +1,11 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { LambdaCdkPipelineStack } from '../lib/lambda-cdk-pipeline-stack';
+import { ApiGatewayStack } from '../lib/api-gateway-stack';
+import { LambdaCdkAppStack } from '../lib/lambda-cdk-app-stack';
 
 const app = new cdk.App();
 
-new LambdaCdkPipelineStack(app, 'LambdaCdkPipelineStack', {
-  env: {
-    account: '012605359120',
-    region: 'us-west-2',
-  }
+const ApiStack = new ApiGatewayStack(app, 'ApiGatewayStack', {});
+const LambdaStack = new LambdaCdkAppStack(app, 'LambdaCdkStack', ApiStack.restApi, {
 });

@@ -35,11 +35,11 @@ export class OrderFunction extends Construct {
     }
 
     const createOrderLambda = new NodejsFunction(this, 'CreateOrderFunction', {
-      entry: join(__dirname, '../order_functions', 'create.ts'),
+      entry: join(__dirname, '../../order_functions', 'create.ts'),
       ...nodeJsFunctionProps,
     });
     const listOrderLambda = new NodejsFunction(this, 'ListOrderFunction', {
-      entry: join(__dirname, '../order_functions', 'list.ts'),
+      entry: join(__dirname, '../../order_functions', 'list.ts'),
       ...nodeJsFunctionProps,
     });
     // const deleteOrderLambda = new NodejsFunction(this, 'DeleteOrderFunction', {

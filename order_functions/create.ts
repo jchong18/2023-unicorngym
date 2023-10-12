@@ -15,6 +15,7 @@ export const handler = async (event: any = {}): Promise<any> => {
     return { statusCode: 400, body: 'Invalid request, the parameter body is required' };
   }
   const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
+
   item[PRIMARY_KEY] = uuidv4();
   const params = {
     TableName: TABLE_NAME,
@@ -33,7 +34,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
       },
-      body: 'error'
+      body: 'success'
     };
   } catch (dbError) {
     const errorResponse = (dbError as AWS.AWSError)?.code === 'ValidationException' && (dbError as AWS.AWSError)?.message.includes('reserved keyword') ?
