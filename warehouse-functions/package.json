@@ -1,0 +1,15 @@
+ {
+  "name": "order-service",
+  "version": "1.0.0",
+  "description": "Lambdas to handle order apis",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "*",
+    "@types/uuid": "*"
+  },
+  "dependencies": {
+    "aws-sdk": "*",
+    "uuid": "*"
+  }
+}

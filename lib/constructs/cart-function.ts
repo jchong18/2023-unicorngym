@@ -17,7 +17,7 @@ export class CartFunction extends Construct {
 
     const cartTable = new Table(this, 'CartTable', {
       partitionKey: { name: cartTablePrimaryKey, type: AttributeType.STRING },
-      tableName: 'OrderTable',
+      tableName: 'CartTable',
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
@@ -49,6 +49,7 @@ export class CartFunction extends Construct {
 
     cartTable.grantReadWriteData(createCartLambda);
     cartTable.grantReadWriteData(getCartLambda);
+    cartTable.grantReadWriteData(editCartLambda);
 
     const createCartIntegration = new LambdaIntegration(createCartLambda);
     const listCartIntegration = new LambdaIntegration(getCartLambda);
