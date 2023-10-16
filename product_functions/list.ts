@@ -17,7 +17,7 @@ export const handler = async (): Promise<any> => {
       headers: {
         "Access-Control-Allow-Headers" : "Content-Type",
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+        "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
       },
       body: JSON.stringify(response.Items),
     };

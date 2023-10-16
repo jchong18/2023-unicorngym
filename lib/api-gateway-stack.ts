@@ -1,6 +1,6 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { MethodLoggingLevel, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Cors, MethodLoggingLevel, RestApi } from 'aws-cdk-lib/aws-apigateway';
 
 export class ApiGatewayStack extends Stack {
   restApi: RestApi;
@@ -13,7 +13,10 @@ export class ApiGatewayStack extends Stack {
       deployOptions: {
         loggingLevel: MethodLoggingLevel.INFO,
         metricsEnabled: true,
-      }
+      },
+      // defaultCorsPreflightOptions: {
+      //   allowOrigins: Cors.ALL_ORIGINS
+      // }
     });
   }
 }

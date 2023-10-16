@@ -52,15 +52,30 @@ export class CartFunction extends Construct {
     cartTable.grantReadWriteData(editCartLambda);
 
     const createCartIntegration = new LambdaIntegration(createCartLambda);
-    const listCartIntegration = new LambdaIntegration(getCartLambda);
+    const getCartIntegration = new LambdaIntegration(getCartLambda);
     const editCartIntegration = new LambdaIntegration(editCartLambda);
 
     const cart = restApi.root.addResource('cart');
-    cart.addMethod('GET', listCartIntegration);
     cart.addMethod('POST', createCartIntegration);
-    cart.addMethod('PUT', editCartIntegration);
+    
+    const cartById = cart.addResource('{cartId}');
+    cartById.addMethod('GET', getCartIntegration, {
+      requestParameters: {
+        'method.request.path.cartId': true,
+      },
+    });
+    cartById.addMethod('PUT', editCartIntegration, {
+      requestParameters: {
+        'method.request.path.cartId': true,
+      },
+    });
 
     cart.addCorsPreflight({
+      allowOrigins: Cors.ALL_ORIGINS,
+      allowHeaders: Cors.DEFAULT_HEADERS,
+      allowMethods: Cors.ALL_METHODS,
+    });
+    cartById.addCorsPreflight({
       allowOrigins: Cors.ALL_ORIGINS,
       allowHeaders: Cors.DEFAULT_HEADERS,
       allowMethods: Cors.ALL_METHODS,

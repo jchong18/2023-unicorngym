@@ -52,15 +52,30 @@ export class WarehouseFunction extends Construct {
     warehouseTable.grantReadWriteData(editWarehouseLambda);
 
     const createWarehouseIntegration = new LambdaIntegration(createWarehouseLambda);
-    const listWarehouseIntegration = new LambdaIntegration(getWarehouseLambda);
+    const getWarehouseIntegration = new LambdaIntegration(getWarehouseLambda);
     const editWarehouseIntegration = new LambdaIntegration(editWarehouseLambda);
 
     const warehouse = restApi.root.addResource('warehouse');
-    warehouse.addMethod('GET', listWarehouseIntegration);
     warehouse.addMethod('POST', createWarehouseIntegration);
-    warehouse.addMethod('PUT', editWarehouseIntegration);
+
+    const warehouseById = warehouse.addResource('{productId}');
+    warehouseById.addMethod('GET', getWarehouseIntegration, {
+      requestParameters: {
+        'method.request.path.productId': true,
+      },
+    });
+    warehouseById.addMethod('PUT', editWarehouseIntegration, {
+      requestParameters: {
+        'method.request.path.productId': true,
+      },
+    });
 
     warehouse.addCorsPreflight({
+      allowOrigins: Cors.ALL_ORIGINS,
+      allowHeaders: Cors.DEFAULT_HEADERS,
+      allowMethods: Cors.ALL_METHODS,
+    });
+    warehouseById.addCorsPreflight({
       allowOrigins: Cors.ALL_ORIGINS,
       allowHeaders: Cors.DEFAULT_HEADERS,
       allowMethods: Cors.ALL_METHODS,
