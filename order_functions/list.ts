@@ -5,7 +5,6 @@ const TABLE_NAME = process.env.TABLE_NAME || '';
 const ddb = new AWS.DynamoDB.DocumentClient();
 
 export const handler = async (): Promise<any> => {
-
   const params = {
     TableName: TABLE_NAME
   };

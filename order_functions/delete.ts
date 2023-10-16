@@ -10,7 +10,6 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
 
 export const handler = async (event: any = {}): Promise<any> => {
   const orderId = event['pathParameters']['orderId'];
-  console.log(event.pathParameters);
   const params = {
     TableName: TABLE_NAME,
     Key: {

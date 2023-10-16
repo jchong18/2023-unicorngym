@@ -1,13 +1,17 @@
 import * as AWS from 'aws-sdk';
 
 const TABLE_NAME = process.env.TABLE_NAME || '';
+const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
 
 const ddb = new AWS.DynamoDB.DocumentClient();
 
-export const handler = async (): Promise<any> => {
-
+export const handler = async (event: any = {}): Promise<any> => {
+  const cartId = event['pathParameters']['cartId'];
   const params = {
-    TableName: TABLE_NAME
+    TableName: TABLE_NAME,
+    Key: {
+      [PRIMARY_KEY]: cartId,
+    },
   };
 
   try {

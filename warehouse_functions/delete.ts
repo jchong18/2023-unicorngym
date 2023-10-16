@@ -9,12 +9,11 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
 
 export const handler = async (event: any = {}): Promise<any> => {
-  const orderId = event['pathParameters']['orderId'];
-  console.log(event.pathParameters);
+  const productId = event['pathParameters']['productId'];
   const params = {
     TableName: TABLE_NAME,
     Key: {
-      [PRIMARY_KEY]: orderId,
+      [PRIMARY_KEY]: productId,
     },
   };
 
