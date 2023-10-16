@@ -34,7 +34,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
       },
-      body: 'error'
+      body: item[PRIMARY_KEY],
     };
   } catch (dbError) {
     const errorResponse = (dbError as AWS.AWSError)?.code === 'ValidationException' && (dbError as AWS.AWSError)?.message.includes('reserved keyword') ?

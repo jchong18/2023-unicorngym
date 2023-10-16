@@ -23,11 +23,11 @@ export class AssetsStack extends Stack {
       destinationBucket: this.AssetsBucket,
     });
 
-    new BucketDeployment(this, 'ImagesBucketDeployment', {
-      sources: [Source.asset('./images')],
-      destinationBucket: this.AssetsBucket,
-      destinationKeyPrefix: 'images',
-    });
+    // new BucketDeployment(this, 'ImagesBucketDeployment', {
+    //   sources: [Source.asset('./images')],
+    //   destinationBucket: this.AssetsBucket,
+    //   destinationKeyPrefix: 'images',
+    // });
 
     const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
     this.AssetsBucket.grantRead(originAccessIdentity);

@@ -15,7 +15,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   };
 
   try {
-    const response = await ddb.scan(params).promise();
+    const response = await ddb.get(params).promise();
     return {
       statusCode: 200,
       headers: {
@@ -23,7 +23,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
       },
-      body: JSON.stringify(response.Items),
+      body: JSON.stringify(response.Item),
     };
   } catch (dbError) {
     return { statusCode: 500, body: JSON.stringify(dbError) };

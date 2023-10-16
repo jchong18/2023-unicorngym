@@ -14,10 +14,20 @@ export const handler = async (event: any = {}): Promise<any> => {
     return { statusCode: 400, body: 'Invalid request, the parameter body is required' };
   }
   const cartId = event['pathParameters']['cartId'];
+  const eventBody = JSON.parse(event['body']);
   const params = {
     TableName: TABLE_NAME,
     Key: {
       [PRIMARY_KEY]: cartId,
+    },
+    UpdateExpression: "set #MyVariable1 = :x, #MyVariable2 = :y",
+    ExpressionAttributeNames: {
+        '#MyVariable1': 'CartItems',
+        '#MyVariable2': 'IsCheckedOut',
+    },
+    ExpressionAttributeValues: {
+      ':x': eventBody.cartItems,
+      ':y': eventBody.isCheckedOut,
     },
   };
 
@@ -34,11 +44,11 @@ export const handler = async (event: any = {}): Promise<any> => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
       },
-      body: 'error'
+      body: 'success',
     };
   } catch (dbError) {
     const errorResponse = (dbError as AWS.AWSError)?.code === 'ValidationException' && (dbError as AWS.AWSError)?.message.includes('reserved keyword') ?
       DYNAMODB_EXECUTION_ERROR : RESERVED_RESPONSE;
-    return { statusCode: 500, body: errorResponse };
+    return { statusCode: 500, body: `${eventBody}----------------------${errorResponse}`};
   }
 };
