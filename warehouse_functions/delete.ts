@@ -26,7 +26,7 @@ export const handler = async (event: any = {}): Promise<any> => {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
       },
-      body: ''
+      body: 'success'
     };
   } catch (dbError) {
     console.log(dbError);
