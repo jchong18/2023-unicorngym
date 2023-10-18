@@ -6,9 +6,12 @@ import { AllowedMethods, CfnDistribution, CfnOriginAccessControl, Distribution, 
 import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import { Effect, PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { CloudFrontToS3 } from '@aws-solutions-constructs/aws-cloudfront-s3';
+import * as cdk from "aws-cdk-lib";
+
+
 export class AssetsStack extends Stack {
   AssetsBucket: Bucket;
-
+  frontendUri: cdk.CfnOutput;
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -23,7 +26,7 @@ export class AssetsStack extends Stack {
     const originAccessIdentity = new OriginAccessIdentity(this, 'OriginAccessIdentity');
 
     // cdk CloudFrontToS3 for cloudfront to s3 web hosting example
-    new CloudFrontToS3(this, 'test-cloudfront-s3', {
+    const cfs3 = new CloudFrontToS3(this, 'test-cloudfront-s3', {
       existingBucketObj:this.AssetsBucket,
       cloudFrontDistributionProps: {
         defaultBehavior: {
@@ -31,8 +34,10 @@ export class AssetsStack extends Stack {
         }
       }
     })
-
-    
+    this.frontendUri = new cdk.CfnOutput(this, "CloudFrontWebDistribution URI", {
+      value: cfs3.cloudFrontWebDistribution.distributionDomainName,
+      description: 'CloudFrontWebDistribution Endpoint'
+    });
 
 
 
