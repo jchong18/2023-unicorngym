@@ -25,11 +25,6 @@ export class PipelineCDKAppStack extends cdk.Stack {
       synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.codeCommit(repository, "main"),
         commands: [
-            "pwd", 
-            "npm install ../src/order_functions",
-            "npm install ../src/cart_functions",
-            "npm install ../src/product_functions",
-            "npm install ../src/warehouse_functions",
             "npm install", 
             "npm run build", 
             "npx cdk synth"

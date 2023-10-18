@@ -5,7 +5,7 @@
     "devcommerce-cdk": "bin/lambda-cdk.js"
   },
   "scripts": {
-    "postinstall": "(cd order_functions && npm install);",
+    "postinstall": "(npm install ./src/order_functions && npm install ./src/cart_functions && npm install ./src/product_functions && npm install ./src/warehouse_functions);",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
@@ -24,7 +24,7 @@
     "@aws-solutions-constructs/aws-cloudfront-s3": "^2.45.0",
     "aws-cdk-lib": "^2.101.1",
     "constructs": "^10.3.0",
-    "order-service": "file:order_functions",
+    "order-service": "file:src/warehouse_functions",
     "source-map-support": "^0.5.21"
   }
 }
