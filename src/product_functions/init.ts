@@ -12,23 +12,23 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
 export const handler = async (event: any = {}): Promise<any> => {
   const params = {
     RequestItems: {
-      TABLE_NAME: [
+      [TABLE_NAME]: [
          {
            PutRequest: {
              Item: {
-               "ProductId": { "S": uuidv4() },
-                 "Name": { "S": "Wide Sofa & Chaise" },
-                 "ImageName": { "S": "sofa_1" },
-                 "Price": { "N": "899.99" },
-                 "ReviewCount": { "N": "237" },
-                 "Rating": { "N": "4.3" },
+                [PRIMARY_KEY]: { "S": uuidv4() },
+                "Name": { "S": "Wide Sofa & Chaise" },
+                "ImageName": { "S": "sofa_1" },
+                "Price": { "N": "899.99" },
+                "ReviewCount": { "N": "237" },
+                "Rating": { "N": "4.3" },
              }
            }
          },
          {
           PutRequest: {
             Item: {
-              "ProductId": { "S": uuidv4() },
+                [PRIMARY_KEY]: { "S": uuidv4() },
                 "Name": { "S": "Wide Reversible Sleeper Sofa" },
                 "ImageName": { "S": "sofa_3" },
                 "Price": { "N": "1399.99" },
