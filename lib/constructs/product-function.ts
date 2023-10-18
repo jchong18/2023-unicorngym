@@ -68,7 +68,7 @@ export class ProductFunction extends Construct {
 
 
     const productinit = restApi.root.addResource('productinit');
-    productinit.addMethod('POST', initProductIntegration);
+    productinit.addMethod('GET', initProductIntegration);
 
 
     const product = restApi.root.addResource('product');
