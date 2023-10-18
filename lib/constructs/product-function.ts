@@ -49,16 +49,27 @@ export class ProductFunction extends Construct {
       entry: join(__dirname, '../../product_functions', 'get.ts'),
       ...nodeJsFunctionProps,
     });
+    const initProductLambda = new NodejsFunction(this, 'InitProductFunction', {
+      entry: join(__dirname, '../../product_functions', 'init.ts'),
+      ...nodeJsFunctionProps,
+    });
 
     productTable.grantReadWriteData(createProductLambda);
     productTable.grantReadWriteData(listProductLambda);
     productTable.grantReadWriteData(editProductLambda);
     productTable.grantReadWriteData(getProductLambda);
+    productTable.grantReadWriteData(initProductLambda);
 
     const createProductIntegration = new LambdaIntegration(createProductLambda);
     const listProductIntegration = new LambdaIntegration(listProductLambda);
     const editProductIntegration = new LambdaIntegration(editProductLambda);
     const getProductIntegration = new LambdaIntegration(getProductLambda);
+    const initProductIntegration = new LambdaIntegration(initProductLambda);
+
+
+    const productinit = restApi.root.addResource('productinit');
+    productinit.addMethod('POST', initProductIntegration);
+
 
     const product = restApi.root.addResource('product');
     product.addMethod('GET', listProductIntegration);
@@ -76,6 +87,11 @@ export class ProductFunction extends Construct {
       },
     });
 
+    productinit.addCorsPreflight({
+      allowOrigins: Cors.ALL_ORIGINS,
+      allowHeaders: Cors.DEFAULT_HEADERS,
+      allowMethods: Cors.ALL_METHODS,
+    });
     product.addCorsPreflight({
       allowOrigins: Cors.ALL_ORIGINS,
       allowHeaders: Cors.DEFAULT_HEADERS,
