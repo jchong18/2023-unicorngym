@@ -58,8 +58,7 @@ export class ProductFunction extends Construct {
     productTable.grantReadWriteData(listProductLambda);
     productTable.grantReadWriteData(editProductLambda);
     productTable.grantReadWriteData(getProductLambda);
-    productTable.grantReadWriteData(initProductLambda);
-
+    productTable.grantFullAccess(initProductLambda);
     const createProductIntegration = new LambdaIntegration(createProductLambda);
     const listProductIntegration = new LambdaIntegration(listProductLambda);
     const editProductIntegration = new LambdaIntegration(editProductLambda);

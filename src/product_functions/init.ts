@@ -17,7 +17,6 @@ export const handler = async (event: any = {}): Promise<any> => {
            PutRequest: {
              Item: {
                "ProductId": { "S": uuidv4() },
-                 "Asin": { "N": "1111111" },
                  "Name": { "S": "Wide Sofa & Chaise" },
                  "ImageName": { "S": "sofa_1" },
                  "Price": { "N": "899.99" },
@@ -30,7 +29,6 @@ export const handler = async (event: any = {}): Promise<any> => {
           PutRequest: {
             Item: {
               "ProductId": { "S": uuidv4() },
-                "Asin": { "N": "2222222" },
                 "Name": { "S": "Wide Reversible Sleeper Sofa" },
                 "ImageName": { "S": "sofa_3" },
                 "Price": { "N": "1399.99" },
