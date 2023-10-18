@@ -10,16 +10,13 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
 
 export const handler = async (event: any = {}): Promise<any> => {
-  if (!event.body) {
-    return { statusCode: 400, body: 'Invalid request, the parameter body is required' };
-  }
   const params = {
     RequestItems: {
       TABLE_NAME: [
          {
            PutRequest: {
              Item: {
-               "KEY": { "S": uuidv4() },
+               "ProductId": { "S": uuidv4() },
                  "Asin": { "N": "1111111" },
                  "Name": { "S": "Wide Sofa & Chaise" },
                  "ImageName": { "S": "sofa_1" },
@@ -32,7 +29,7 @@ export const handler = async (event: any = {}): Promise<any> => {
          {
           PutRequest: {
             Item: {
-              "KEY": { "S": uuidv4() },
+              "ProductId": { "S": uuidv4() },
                 "Asin": { "N": "2222222" },
                 "Name": { "S": "Wide Reversible Sleeper Sofa" },
                 "ImageName": { "S": "sofa_3" },
