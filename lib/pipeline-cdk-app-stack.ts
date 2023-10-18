@@ -20,7 +20,7 @@ export class PipelineCDKAppStack extends cdk.Stack {
 
     let pipeline = new pipelines.CodePipeline(this, "Pipeline", {
       pipelineName: `Pipeline-${this.stackName}`,
-      selfMutation: false,
+      selfMutation: true,
       publishAssetsInParallel: false,
       synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.codeCommit(repository, "main"),
@@ -29,6 +29,7 @@ export class PipelineCDKAppStack extends cdk.Stack {
             "npm run build", 
             "npx cdk synth"
           ],
+        
       }),
       codeBuildDefaults: {
         rolePolicy: [
