@@ -21,6 +21,7 @@ export class PipelineCDKAppStack extends cdk.Stack {
     let pipeline = new pipelines.CodePipeline(this, "Pipeline", {
       pipelineName: `Pipeline-${this.stackName}`,
       selfMutation: true,
+      dockerEnabledForSelfMutation: true,
       publishAssetsInParallel: false,
       synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.codeCommit(repository, "main"),
