@@ -20,8 +20,6 @@ export class PipelineCDKAppStack extends cdk.Stack {
 
     let pipeline = new pipelines.CodePipeline(this, "Pipeline", {
       pipelineName: `Pipeline-${this.stackName}`,
-      selfMutation: true,
-      dockerEnabledForSelfMutation: true,
       publishAssetsInParallel: false,
       synth: new pipelines.ShellStep("Synth", {
         input: pipelines.CodePipelineSource.codeCommit(repository, "main"),
@@ -32,7 +30,12 @@ export class PipelineCDKAppStack extends cdk.Stack {
           ],
         
       }),
+      // Turn this on because the pipeline uses Docker image assets
+      dockerEnabledForSelfMutation: true,
       codeBuildDefaults: {
+        buildEnvironment:{
+          privileged:true
+        },
         rolePolicy: [
           new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
@@ -48,25 +51,26 @@ export class PipelineCDKAppStack extends cdk.Stack {
       },
     });
 
-    // pipeline.addStage(appStage, {
-    //   post: [
-    //     new pipelines.ShellStep("DeployFrontEnd", {
-    //       envFromCfnOutputs: {
-    //         SNOWPACK_PUBLIC_CLOUDFRONT_URL: appStage.cfnOutCloudFrontUrl,
-    //         SNOWPACK_PUBLIC_API_IMAGES_URL: appStage.cfnOutApiImagesUrl,
-    //         BUCKET_NAME: appStage.cfnOutBucketName,
-    //         DISTRIBUTION_ID: appStage.cfnOutDistributionId,
-    //       },
-    //       commands: [
-    //         "cd frontend",
-    //         "npm ci",
-    //         "npm run build",
-    //         "aws s3 cp ./src/build s3://$BUCKET_NAME/frontend --recursive",
-    //         `aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"`,
-    //       ],
-    //     }),
-    //   ],
-    // });
+    pipeline.addStage(appStage 
+      // {
+      // post: [
+      //   new pipelines.ShellStep("DeployFrontEnd", {
+      //     envFromCfnOutputs: {
+      //       SNOWPACK_PUBLIC_CLOUDFRONT_URL: appStage.cfnOutCloudFrontUrl,
+      //       SNOWPACK_PUBLIC_API_IMAGES_URL: appStage.cfnOutCloudFrontUrl
+      //     }
+      //     ,
+      //     commands: [
+      //       "cd frontend",
+      //       "npm ci",
+      //       "npm run build",
+      //       "aws s3 cp ./src/build s3://$BUCKET_NAME/frontend --recursive",
+      //       `aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"`,
+      //     ],
+      //   }),
+      // ],
+      //}
+    );
 
     new cdk.CfnOutput(this, "RepositoryCloneUrlHttp", {
       value: repository.repositoryCloneUrlHttp,
@@ -81,8 +85,6 @@ interface AppStageProps extends cdk.StageProps {
 class AppStage extends cdk.Stage {
   public readonly cfnOutApiUrl: cdk.CfnOutput;
   public readonly cfnOutCloudFrontUrl: cdk.CfnOutput;
-  public readonly cfnOutBucketName: cdk.CfnOutput;
-  public readonly cfnOutDistributionId: cdk.CfnOutput;
 
   constructor(scope: Construct, id: string, props: AppStageProps) {
     super(scope, id, props);
