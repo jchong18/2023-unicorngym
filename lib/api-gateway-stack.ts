@@ -20,6 +20,7 @@ export class ApiGatewayStack extends Stack {
       //   allowOrigins: Cors.ALL_ORIGINS
       // }
     });
+
     this.apigatewayUrl = new cdk.CfnOutput(this, "API Gateway URI", {
       value: this.restApi.url,
       description: 'Rest API endpoint',
