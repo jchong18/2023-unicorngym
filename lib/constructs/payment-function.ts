@@ -51,6 +51,8 @@ export class PaymentFunction extends Construct {
 
     processPaymentLambda.addEventSource(new lambdaEventSources.SqsEventSource(PaymentQueue));
 
+    eventBus.grantPutEventsTo(processPaymentLambda);
+
     const getPaymentIntegration = new LambdaIntegration(getPaymentLambda);
 
     const payment = restApi.root.addResource('payment');

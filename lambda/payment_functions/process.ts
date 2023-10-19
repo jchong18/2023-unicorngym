@@ -11,10 +11,12 @@ export const handler = async (event: SQSEvent): Promise<any> => {
 
   try {
     if (randNum >= 5) {
-      eventBridge.putEvents({
+      const result = eventBridge.putEvents({
         Entries: [
           {
             EventBusName: EVENT_BUS_NAME,
+            Source: 'ProcessPaymentLambda',
+            DetailType: 'test-type',
             Detail: JSON.stringify({
               status: 'payment_completed'
             }),
@@ -29,7 +31,7 @@ export const handler = async (event: SQSEvent): Promise<any> => {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
         },
-        body: 'Payment Success'
+        body: result,
       };
     } else {
       eventBridge.putEvents({
