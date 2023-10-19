@@ -19,18 +19,26 @@ export class Payment extends Construct {
           'aws-sdk', // Use the 'aws-sdk' available in the Lambda runtime
         ],
       },
+      environment: {
+        EVENT_BUS_NAME: 'bus'
+      },
       runtime: Runtime.NODEJS_16_X,
     }
+
+    const getPaymentLambda = new NodejsFunction(this, 'ProcessPaymentFunction', {
+      entry: join(__dirname, '../../lambda/payment_functions', 'get.ts'),
+      ...nodeJsFunctionProps,
+    });
 
     const processPaymentLambda = new NodejsFunction(this, 'ProcessPaymentFunction', {
       entry: join(__dirname, '../../lambda/payment_functions', 'process.ts'),
       ...nodeJsFunctionProps,
     });
 
-    const processPaymentIntegration = new LambdaIntegration(processPaymentLambda);
+    const getPaymentIntegration = new LambdaIntegration(getPaymentLambda);
 
     const payment = restApi.root.addResource('payment');
-    payment.addMethod('GET', processPaymentIntegration);
+    payment.addMethod('GET', getPaymentIntegration);
 
     payment.addCorsPreflight({
       allowOrigins: Cors.ALL_ORIGINS,
