@@ -6,6 +6,7 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 
 export class OrderFunction extends Construct {
@@ -16,7 +17,9 @@ export class OrderFunction extends Construct {
     super(scope, id);
 
     const orderTablePrimaryKey = 'OrderId';
+    const OrderQueue = new sqs.Queue(this, 'OrderQueue');
 
+    
     const orderTable = new Table(this, 'OrderTable', {
       partitionKey: { name: orderTablePrimaryKey, type: AttributeType.STRING },
       tableName: 'OrderTable',
