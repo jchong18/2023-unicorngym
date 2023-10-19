@@ -19,7 +19,6 @@ export class OrderFunction extends Construct {
 
     const orderTablePrimaryKey = 'OrderId';
     const OrderQueue = new sqs.Queue(this, 'OrderQueue');
-    const eventSource = new lambdaEventSources.SqsEventSource(OrderQueue);
 
     const rule = new Rule(this, 'rule', {
       eventPattern: {
@@ -66,7 +65,7 @@ export class OrderFunction extends Construct {
     //   entry: join(__dirname, '../order_functions', 'delete.ts'),
     //   ...nodeJsFunctionProps,
     // });
-    processOrderLambda.addEventSource(eventSource);
+    processOrderLambda.addEventSource(new lambdaEventSources.SqsEventSource(OrderQueue));
 
     orderTable.grantReadWriteData(createOrderLambda);
     orderTable.grantReadWriteData(listOrderLambda);
