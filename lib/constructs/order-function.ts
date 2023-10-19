@@ -5,26 +5,31 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { EventBus ,Rule } from 'aws-cdk-lib/aws-events';
+import { EventBus ,Rule, IRuleTarget } from 'aws-cdk-lib/aws-events';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
-
+import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
 export class OrderFunction extends Construct {
   restApi: RestApi;
 
 
-  constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus) {
+  constructor(scope: Construct, id: string, restApi: RestApi, eventBus:EventBus) {
     super(scope, id);
 
     const orderTablePrimaryKey = 'OrderId';
     const OrderQueue = new sqs.Queue(this, 'OrderQueue');
+    const eventSource = new lambdaEventSources.SqsEventSource(OrderQueue);
+
     const rule = new Rule(this, 'rule', {
       eventPattern: {
         detail: {
-          "status": ["warehouse_completed","warehouse_failed","payment_completed","payment_failed"]
+          "status": ["warehouse_failed","payment_completed","payment_failed"]
         }
-      }
+      },
+      eventBus
     });
+    rule.addTarget(new targets.SqsQueue(OrderQueue));
     
     const orderTable = new Table(this, 'OrderTable', {
       partitionKey: { name: orderTablePrimaryKey, type: AttributeType.STRING },
@@ -53,10 +58,15 @@ export class OrderFunction extends Construct {
       entry: join(__dirname, '../../lambda/order_functions', 'list.ts'),
       ...nodeJsFunctionProps,
     });
+    const processOrderLambda = new NodejsFunction(this, 'ListOrderFunction', {
+      entry: join(__dirname, '../../lambda/order_functions', 'list.ts'),
+      ...nodeJsFunctionProps,
+    });
     // const deleteOrderLambda = new NodejsFunction(this, 'DeleteOrderFunction', {
     //   entry: join(__dirname, '../order_functions', 'delete.ts'),
     //   ...nodeJsFunctionProps,
     // });
+    processOrderLambda.addEventSource(eventSource);
 
     orderTable.grantReadWriteData(createOrderLambda);
     orderTable.grantReadWriteData(listOrderLambda);

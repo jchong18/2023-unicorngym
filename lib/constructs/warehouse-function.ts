@@ -12,7 +12,7 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 export class WarehouseFunction extends Construct {
   restApi: RestApi;
 
-  constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus) {
+  constructor(scope: Construct, id: string, restApi: RestApi, eventBus:EventBus) {
     super(scope, id);
 
     const warehouseTablePrimaryKey = 'WarehouseId';
