@@ -6,6 +6,7 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class ProductFunction extends Construct {
   restApi: RestApi;
@@ -14,6 +15,7 @@ export class ProductFunction extends Construct {
     super(scope, id);
 
     const productTablePrimaryKey = 'ProductId';
+    const productQueue = new sqs.Queue(this, 'OrderQueue');
 
     const productTable = new Table(this, 'ProductTable', {
       partitionKey: { name: productTablePrimaryKey, type: AttributeType.STRING },

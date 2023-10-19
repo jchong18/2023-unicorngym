@@ -6,6 +6,7 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 
 export class WarehouseFunction extends Construct {
@@ -15,6 +16,7 @@ export class WarehouseFunction extends Construct {
     super(scope, id);
 
     const warehouseTablePrimaryKey = 'WarehouseId';
+    const warehouseQueue = new sqs.Queue(this, 'OrderQueue');
 
     const warehouseTable = new Table(this, 'WarehouseTable', {
       partitionKey: { name: warehouseTablePrimaryKey, type: AttributeType.STRING },

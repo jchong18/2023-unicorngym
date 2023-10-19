@@ -13,6 +13,7 @@ export class CartFunction extends Construct {
   constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus) {
     super(scope, id);
     const cartTablePrimaryKey = 'CartId';
+    const CartQueue = new sqs.Queue(this, 'OrderQueue');
 
     const cartTable = new Table(this, 'CartTable', {
       partitionKey: { name: cartTablePrimaryKey, type: AttributeType.STRING },
