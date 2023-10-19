@@ -5,7 +5,7 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus ,Rule } from 'aws-cdk-lib/aws-events';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 
@@ -18,7 +18,13 @@ export class OrderFunction extends Construct {
 
     const orderTablePrimaryKey = 'OrderId';
     const OrderQueue = new sqs.Queue(this, 'OrderQueue');
-
+    const rule = new Rule(this, 'rule', {
+      eventPattern: {
+        detail: {
+          "status": ["warehouse_completed","warehouse_failed","payment_completed","payment_failed"]
+        }
+      }
+    });
     
     const orderTable = new Table(this, 'OrderTable', {
       partitionKey: { name: orderTablePrimaryKey, type: AttributeType.STRING },
