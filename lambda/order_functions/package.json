@@ -1,14 +1,16 @@
- {
-  "name": "order-service",
+{
+  "name": "payment-service",
   "version": "1.0.0",
   "description": "Lambdas to handle order apis",
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.125",
     "@types/node": "*",
     "@types/uuid": "*"
   },
   "dependencies": {
+    "aws-lambda": "*",
     "aws-sdk": "*",
     "aws-lambda": "*",
     "uuid": "*"
