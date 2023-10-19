@@ -32,7 +32,17 @@ export class AssetsStack extends Stack {
         defaultBehavior: {
           origin: new S3Origin(this.AssetsBucket, {originAccessIdentity}),
         }
-      }
+      },
+      insertHttpSecurityHeaders: false,
+      responseHeadersPolicyProps: {
+        responseHeadersPolicyName: 'csp-policy',
+        securityHeadersBehavior: {
+          contentSecurityPolicy: {
+            contentSecurityPolicy: "default-src https://ezhr90pp0k.execute-api.us-west-2.amazonaws.com 'self' data:",
+            override: true,
+          }
+        }
+      },
     })
     this.frontendUri = new cdk.CfnOutput(this, "CloudFrontWebDistribution URI", {
       value: cfs3.cloudFrontWebDistribution.distributionDomainName,
