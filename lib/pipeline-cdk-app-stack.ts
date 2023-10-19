@@ -3,6 +3,8 @@ import * as cdk from "aws-cdk-lib";
 import { ApiGatewayStack } from '../lib/api-gateway-stack';
 import { LambdaCdkAppStack } from '../lib/lambda-cdk-app-stack';
 import { AssetsStack } from '../lib/assets-stack';
+import { EventStack } from './event-stack';
+
 import * as codecommit from "aws-cdk-lib/aws-codecommit";
 import * as pipelines from "aws-cdk-lib/pipelines";
 import * as iam from "aws-cdk-lib/aws-iam";
@@ -91,7 +93,8 @@ class AppStage extends cdk.Stage {
     
     const ApiStack = new ApiGatewayStack(this, 'ApiGatewayStack', {});
     const S3Stack = new AssetsStack(this, 'AssetsS3Stack', {});
-    const LambdaStack = new LambdaCdkAppStack(this, 'LambdaCdkStack', ApiStack.restApi, {
+    const EventBridgeStack = new EventStack(this, 'AssetsS3Stack', {});
+    const LambdaStack = new LambdaCdkAppStack(this, 'LambdaCdkStack', ApiStack.restApi, EventBridgeStack.eventbus, {
     });
 
     this.cfnOutApiUrl = ApiStack.apigatewayUrl;

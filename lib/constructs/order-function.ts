@@ -5,12 +5,14 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { EventBus } from 'aws-cdk-lib/aws-events';
 
 
 export class OrderFunction extends Construct {
   restApi: RestApi;
 
-  constructor(scope: Construct, id: string, restApi: RestApi) {
+
+  constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus) {
     super(scope, id);
 
     const orderTablePrimaryKey = 'OrderId';

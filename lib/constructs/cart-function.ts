@@ -5,14 +5,13 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { EventBus } from 'aws-cdk-lib/aws-events';
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 
 export class CartFunction extends Construct {
-  restApi: RestApi;
-
-  constructor(scope: Construct, id: string, restApi: RestApi) {
+  constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus) {
     super(scope, id);
-
     const cartTablePrimaryKey = 'CartId';
 
     const cartTable = new Table(this, 'CartTable', {

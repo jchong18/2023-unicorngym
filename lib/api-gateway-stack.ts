@@ -2,6 +2,7 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { Cors, MethodLoggingLevel, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import * as cdk from "aws-cdk-lib";
+import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class ApiGatewayStack extends Stack {
   restApi: RestApi;
