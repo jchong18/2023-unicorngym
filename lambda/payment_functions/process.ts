@@ -7,17 +7,6 @@ const eventBridge = new AWS.EventBridge({});
 export const handler = async (event: SQSEvent): Promise<any> => {
   console.log(event.Records);
 
-  eventBridge.putEvents({
-    Entries: [
-      {
-        EventBusName: EVENT_BUS_NAME,
-        Detail: JSON.stringify({
-          status: 'payment_completed'
-        }),
-      }
-    ],
-  });
-
   const randNum = Math.floor(Math.random() * 100);
 
   try {

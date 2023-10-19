@@ -6,14 +6,16 @@ import { CartFunction } from './constructs/cart-function';
 import { ProductFunction } from './constructs/product-function';
 import { WarehouseFunction } from './constructs/warehouse-function';
 import { EventBus } from 'aws-cdk-lib/aws-events';
+import { PaymentFunction } from './constructs/payment-function';
 
 export class LambdaCdkAppStack extends Stack {
-  constructor(scope: Construct, id: string, restApi: RestApi, eventbus:EventBus ,props?: StackProps) {
+  constructor(scope: Construct, id: string, restApi: RestApi, eventbus: EventBus ,props?: StackProps) {
     super(scope, id, props);
 
-    const Order = new OrderFunction(this, 'OrderFunction', restApi,eventbus);
-    const Cart = new CartFunction(this, 'CartFunction', restApi,eventbus);
-    const Product = new ProductFunction(this, 'ProdutFunction', restApi,eventbus);
-    const Warehouse = new WarehouseFunction(this, 'WarehouseFunction', restApi,eventbus);
+    const Order = new OrderFunction(this, 'OrderFunction', restApi, eventbus);
+    const Cart = new CartFunction(this, 'CartFunction', restApi, eventbus);
+    const Product = new ProductFunction(this, 'ProdutFunction', restApi, eventbus);
+    const Warehouse = new WarehouseFunction(this, 'WarehouseFunction', restApi, eventbus);
+    const Payment = new PaymentFunction(this, 'PaymentFunction', restApi, eventbus);
   }
 }

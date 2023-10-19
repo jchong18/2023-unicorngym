@@ -38,7 +38,7 @@ export class AssetsStack extends Stack {
         responseHeadersPolicyName: 'csp-policy',
         securityHeadersBehavior: {
           contentSecurityPolicy: {
-            contentSecurityPolicy: "default-src https://rpm7qnskkk.execute-api.us-east-1.amazonaws.com 'self' data:",
+            contentSecurityPolicy: "default-src https://ezhr90pp0k.execute-api.us-west-2.amazonaws.com 'self' data:",
             override: true,
           }
         }

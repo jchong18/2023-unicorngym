@@ -14,16 +14,15 @@ export class OrderFunction extends Construct {
   restApi: RestApi;
 
 
-  constructor(scope: Construct, id: string, restApi: RestApi, eventBus:EventBus) {
+  constructor(scope: Construct, id: string, restApi: RestApi, eventBus: EventBus) {
     super(scope, id);
 
     const orderTablePrimaryKey = 'OrderId';
     const OrderQueue = new sqs.Queue(this, 'OrderQueue');
-
     const rule = new Rule(this, 'rule', {
       eventPattern: {
         detail: {
-          "status": ["warehouse_failed","payment_completed","payment_failed"]
+          'status': ['warehouse_failed', 'payment_completed', 'payment_failed'],
         }
       },
       eventBus
