@@ -28,7 +28,7 @@ export const handler = async (event: any = {}): Promise<any> => {
          {
           PutRequest: {
             Item: {
-                [PRIMARY_KEY]: { "S": uuidv4() },
+                "pk": { "S": uuidv4() },
                 "Name": { "S": "Wide Reversible Sleeper Sofa" },
                 "ImageName": { "S": "sofa_3" },
                 "Price": { "N": "1399.99" },
@@ -40,7 +40,6 @@ export const handler = async (event: any = {}): Promise<any> => {
       ]
     }
   };
- 
   try {
     
     await ddb.batchWrite(params).promise();
