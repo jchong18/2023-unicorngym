@@ -91,9 +91,9 @@ class AppStage extends cdk.Stage {
   constructor(scope: Construct, id: string, props: AppStageProps) {
     super(scope, id, props);
     
+    const EventBridgeStack = new EventStack(this, 'EventBridgeStack', {});
     const ApiStack = new ApiGatewayStack(this, 'ApiGatewayStack', {});
     const S3Stack = new AssetsStack(this, 'AssetsS3Stack', {});
-    const EventBridgeStack = new EventStack(this, 'AssetsS3Stack', {});
     const LambdaStack = new LambdaCdkAppStack(this, 'LambdaCdkStack', ApiStack.restApi, EventBridgeStack.eventbus, {
     });
 
