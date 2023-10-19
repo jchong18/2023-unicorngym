@@ -4,6 +4,7 @@ import { SQSEvent } from 'aws-lambda';
 const EVENT_BUS_NAME = process.env.EVENT_BUS_NAME || '';
 const eventBridge = new AWS.EventBridge({});
 
+<<<<<<< HEAD
 enum OrderStatus {
   Order_started,
   Order_succeed,
@@ -67,5 +68,55 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     const errorResponse = (dbError as AWS.AWSError)?.code === 'ValidationException' && (dbError as AWS.AWSError)?.message.includes('reserved keyword') ?
       DYNAMODB_EXECUTION_ERROR : RESERVED_RESPONSE;
     return { statusCode: 500, body: `${eventBody}----------------------${errorResponse}`};
+=======
+export const handler = async (event: SQSEvent): Promise<any> => {
+  console.log(event.Records);
+  try {
+    switch () {
+      case value:
+        
+        break;
+    
+      default:
+        break;
+    }
+    
+    if (randNum >= 5) {
+      eventBridge.putEvents({
+        Entries: [
+          {
+            EventBusName: EVENT_BUS_NAME,
+            Detail: JSON.stringify({
+              status: 'payment_completed'
+            }),
+          }
+        ],
+      }).promise();
+  
+      return {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Headers" : "Content-Type",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "OPTIONS,POST,DELETE,PUT,GET"
+        },
+        body: 'Payment Success'
+      };
+    } else {
+      eventBridge.putEvents({
+        Entries: [
+          {
+            EventBusName: EVENT_BUS_NAME,
+            Detail: JSON.stringify({
+              status: 'payment_failed'
+            }),
+          }
+        ],
+      }).promise();
+      return { statusCode: 500, body: 'Payment ERROR!' };
+    }
+  } catch (ebError) {
+    return { statusCode: 500, body: JSON.stringify(ebError) };
+>>>>>>> 4721c28 (temp save)
   }
 };
