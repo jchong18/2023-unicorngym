@@ -58,7 +58,7 @@ export class OrderFunction extends Construct {
       entry: join(__dirname, '../../lambda/order_functions', 'list.ts'),
       ...nodeJsFunctionProps,
     });
-    const processOrderLambda = new NodejsFunction(this, 'ListOrderFunction', {
+    const processOrderLambda = new NodejsFunction(this, 'processOrderFunction', {
       entry: join(__dirname, '../../lambda/order_functions', 'list.ts'),
       ...nodeJsFunctionProps,
     });
