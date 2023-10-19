@@ -5,7 +5,7 @@
     "devcommerce-cdk": "bin/lambda-cdk.js"
   },
   "scripts": {
-    "postinstall": "(npm install ./src/order_functions && npm install ./src/cart_functions && npm install ./src/product_functions && npm install ./src/warehouse_functions);",
+    "postinstall": "(npm install ./lambda/order_functions && npm install ./lambda/cart_functions && npm install ./lambda/product_functions && npm install ./lambda/warehouse_functions);",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",

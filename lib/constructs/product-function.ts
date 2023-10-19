@@ -34,23 +34,23 @@ export class ProductFunction extends Construct {
     }
 
     const createProductLambda = new NodejsFunction(this, 'CreateProductFunction', {
-      entry: join(__dirname, '../../src/product_functions', 'create.ts'),
+      entry: join(__dirname, '../../lambda/product_functions', 'create.ts'),
       ...nodeJsFunctionProps,
     });
     const listProductLambda = new NodejsFunction(this, 'ListProductFunction', {
-      entry: join(__dirname, '../../src/product_functions', 'list.ts'),
+      entry: join(__dirname, '../../lambda/product_functions', 'list.ts'),
       ...nodeJsFunctionProps,
     });
     const editProductLambda = new NodejsFunction(this, 'EditProductFunction', {
-      entry: join(__dirname, '../../src/product_functions', 'edit.ts'),
+      entry: join(__dirname, '../../lambda/product_functions', 'edit.ts'),
       ...nodeJsFunctionProps,
     });
     const getProductLambda = new NodejsFunction(this, 'GetProductFunction', {
-      entry: join(__dirname, '../../src/product_functions', 'get.ts'),
+      entry: join(__dirname, '../../lambda/product_functions', 'get.ts'),
       ...nodeJsFunctionProps,
     });
     const initProductLambda = new NodejsFunction(this, 'InitProductFunction', {
-      entry: join(__dirname, '../../src/product_functions', 'init.ts'),
+      entry: join(__dirname, '../../lambda/product_functions', 'init.ts'),
       ...nodeJsFunctionProps,
     });
 

@@ -35,15 +35,15 @@ export class WarehouseFunction extends Construct {
     }
 
     const createWarehouseLambda = new NodejsFunction(this, 'CreateWarehouseFunction', {
-      entry: join(__dirname, '../../src/warehouse_functions', 'create.ts'),
+      entry: join(__dirname, '../../lambda/warehouse_functions', 'create.ts'),
       ...nodeJsFunctionProps,
     });
     const getWarehouseLambda = new NodejsFunction(this, 'GetWarehouseFunction', {
-      entry: join(__dirname, '../../src/warehouse_functions', 'get.ts'),
+      entry: join(__dirname, '../../lambda/warehouse_functions', 'get.ts'),
       ...nodeJsFunctionProps,
     });
     const editWarehouseLambda = new NodejsFunction(this, 'EditWarehouseFunction', {
-      entry: join(__dirname, '../../src/warehouse_functions', 'edit.ts'),
+      entry: join(__dirname, '../../lambda/warehouse_functions', 'edit.ts'),
       ...nodeJsFunctionProps,
     });
 

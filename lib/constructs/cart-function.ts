@@ -35,15 +35,15 @@ export class CartFunction extends Construct {
     }
 
     const createCartLambda = new NodejsFunction(this, 'CreateCartFunction', {
-      entry: join(__dirname, '../../src/cart_functions', 'create.ts'),
+      entry: join(__dirname, '../../lambda/cart_functions', 'create.ts'),
       ...nodeJsFunctionProps,
     });
     const getCartLambda = new NodejsFunction(this, 'GetCartFunction', {
-      entry: join(__dirname, '../../src/cart_functions', 'get.ts'),
+      entry: join(__dirname, '../../lambda/cart_functions', 'get.ts'),
       ...nodeJsFunctionProps,
     });
     const editCartLambda = new NodejsFunction(this, 'EditCartFunction', {
-      entry: join(__dirname, '../../src/cart_functions', 'edit.ts'),
+      entry: join(__dirname, '../../lambda/cart_functions', 'edit.ts'),
       ...nodeJsFunctionProps,
     });
 
