@@ -71,6 +71,7 @@ export class CartFunction extends Construct {
     const editCartIntegration = new LambdaIntegration(editCartLambda);
 
     processCartLambda.addEventSource(new lambdaEventSources.SqsEventSource(cartQueue));
+    eventBus.grantPutEventsTo(processCartLambda);
 
     const cart = restApi.root.addResource('cart');
     cart.addMethod('POST', createCartIntegration);

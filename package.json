@@ -24,12 +24,8 @@
     "@aws-solutions-constructs/aws-cloudfront-s3": "^2.45.0",
     "aws-cdk-lib": "^2.101.1",
     "constructs": "^10.3.0",
-<<<<<<< HEAD
     "order-service": "file:lambda/warehouse_functions",
     "payment-service": "file:lambda/order_functions",
-=======
-    "order-service": "file:lambda/order_functions",
->>>>>>> ca958fb (fix)
     "source-map-support": "^0.5.21"
   }
 }

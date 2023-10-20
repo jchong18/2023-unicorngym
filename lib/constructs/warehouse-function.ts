@@ -28,6 +28,7 @@ export class WarehouseFunction extends Construct {
     });
     rule.addTarget(new targets.SqsQueue(warehouseQueue));
     
+    
     const warehouseTable = new Table(this, 'WarehouseTable', {
       partitionKey: { name: warehouseTablePrimaryKey, type: AttributeType.STRING },
       tableName: 'WarehouseTable',
@@ -69,10 +70,12 @@ export class WarehouseFunction extends Construct {
     //   ...nodeJsFunctionProps,
     // });
     processWarehouseLambda.addEventSource(new lambdaEventSources.SqsEventSource(warehouseQueue));
+    eventBus.grantPutEventsTo(processWarehouseLambda);
 
     warehouseTable.grantReadWriteData(createWarehouseLambda);
     warehouseTable.grantReadWriteData(getWarehouseLambda);
     warehouseTable.grantReadWriteData(editWarehouseLambda);
+    warehouseTable.grantReadWriteData(processWarehouseLambda);
 
     const createWarehouseIntegration = new LambdaIntegration(createWarehouseLambda);
     const getWarehouseIntegration = new LambdaIntegration(getWarehouseLambda);

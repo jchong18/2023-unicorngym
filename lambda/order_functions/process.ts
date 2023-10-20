@@ -5,9 +5,9 @@ const EVENT_BUS_NAME = process.env.EVENT_BUS_NAME || '';
 const eventBridge = new AWS.EventBridge({});
 
 enum OrderStatus {
-  Order_started,
-  Order_succeed,
-  Order_failed
+  OrderStarted,
+  OrderSucceed,
+  OrderFailed
 }
 
 const TABLE_NAME = process.env.TABLE_NAME || '';
@@ -21,17 +21,16 @@ const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attribut
 
 export const handler = async (event: SQSEvent): Promise<any> => {
   console.log(JSON.parse(event.Records[0].body).detail.status);
-  const status = JSON.parse(event.Records[0].body).detail.status;
-  const orderId = JSON.parse(event.Records[0].body).detail.orderId;
+  const { status, orderId } = JSON.parse(event.Records[0].body).detail;
   const eventBody = JSON.parse(event.Records[0].body);
 
-  var order_Status:OrderStatus = OrderStatus.Order_started;
-  if (status !== 'payment_completed') 
-    order_Status =  OrderStatus.Order_succeed;
-  else if (status !== 'payment_failed')
-    order_Status =  OrderStatus.Order_failed;
-  else if (status !== 'warehouse_fail')
-    order_Status =  OrderStatus.Order_failed;
+  var orderStatus: OrderStatus = OrderStatus.OrderStarted;
+  if (status === 'payment_completed') 
+    orderStatus =  OrderStatus.OrderSucceed;
+  else if (status === 'payment_failed')
+    orderStatus =  OrderStatus.OrderFailed;
+  else if (status === 'warehouse_failed')
+    orderStatus =  OrderStatus.OrderFailed;
     
   
   const params = {
@@ -41,10 +40,10 @@ export const handler = async (event: SQSEvent): Promise<any> => {
     },
     UpdateExpression: "set #MyVariable1 = :x",
     ExpressionAttributeNames: {
-        '#MyVariable1': 'orderStatus'
+        '#MyVariable1': 'OrderStatus'
     },
     ExpressionAttributeValues: {
-      ':x': order_Status
+      ':x': orderStatus
     },
   };
   

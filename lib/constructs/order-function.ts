@@ -44,6 +44,7 @@ export class OrderFunction extends Construct {
       environment: {
         PRIMARY_KEY: orderTablePrimaryKey,
         TABLE_NAME: orderTable.tableName,
+        EVENT_BUS_NAME: eventBus.eventBusName,
       },
       runtime: Runtime.NODEJS_16_X,
     }
@@ -65,6 +66,7 @@ export class OrderFunction extends Construct {
     //   ...nodeJsFunctionProps,
     // });
     processOrderLambda.addEventSource(new lambdaEventSources.SqsEventSource(OrderQueue));
+    eventBus.grantPutEventsTo(processOrderLambda);
 
     orderTable.grantReadWriteData(createOrderLambda);
     orderTable.grantReadWriteData(listOrderLambda);

@@ -1,14 +1,16 @@
- {
-  "name": "order-service",
+{
+  "name": "warehouse-service",
   "version": "1.0.0",
-  "description": "Lambdas to handle order apis",
+  "description": "Lambdas to handle warehouse apis",
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.125",
     "@types/node": "*",
     "@types/uuid": "*"
   },
   "dependencies": {
+    "aws-lambda": "*",
     "aws-sdk": "*",
     "uuid": "*"
   }

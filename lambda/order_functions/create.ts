@@ -3,8 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 const TABLE_NAME = process.env.TABLE_NAME || '';
 const PRIMARY_KEY = process.env.PRIMARY_KEY || '';
+const EVENT_BUS_NAME = process.env.EVENT_BUS_NAME || '';
 
 const ddb = new AWS.DynamoDB.DocumentClient();
+const eventBridge = new AWS.EventBridge({});
 
 const RESERVED_RESPONSE = `Error: You're using AWS reserved keywords as attributes`,
   DYNAMODB_EXECUTION_ERROR = `Error: Execution update, caused a Dynamodb error, please take a look at your CloudWatch Logs.`;
@@ -16,6 +18,7 @@ export const handler = async (event: any = {}): Promise<any> => {
   const item = typeof event.body == 'object' ? event.body : JSON.parse(event.body);
 
   item[PRIMARY_KEY] = uuidv4();
+  item['status'] = 'OrderStarted';
   const params = {
     TableName: TABLE_NAME,
     Item: item
@@ -23,6 +26,19 @@ export const handler = async (event: any = {}): Promise<any> => {
 
   try {
     await ddb.put(params).promise();
+    const result = eventBridge.putEvents({
+      Entries: [
+        {
+          EventBusName: EVENT_BUS_NAME,
+          Source: 'CreateOrderLambda',
+          DetailType: 'test-type',
+          Detail: JSON.stringify({
+            status: 'order_started',
+            items: item.items,
+          }),
+        }
+      ],
+    }).promise();
     // console.log('Error happened here!');
     // console.log('Debug this, and clear these logs!');
     return {
