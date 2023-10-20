@@ -12,7 +12,6 @@
   "dependencies": {
     "aws-lambda": "*",
     "aws-sdk": "*",
-    "aws-lambda": "*",
     "uuid": "*"
   }
 }
