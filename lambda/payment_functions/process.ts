@@ -38,6 +38,8 @@ export const handler = async (event: SQSEvent): Promise<any> => {
         Entries: [
           {
             EventBusName: EVENT_BUS_NAME,
+            Source: 'ProcessPaymentLambda',
+            DetailType: 'test-type',
             Detail: JSON.stringify({
               status: 'payment_failed'
             }),
