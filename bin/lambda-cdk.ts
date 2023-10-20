@@ -9,7 +9,7 @@ import { EventStack } from '../lib/event-stack';
 
 const app = new cdk.App();
 
-//new PipelineCDKAppStack(app, 'PipelineCDKAppStack');
+
 const EventBridgeStack = new EventStack(app, 'EventBridgeStack', {});
 const ApiStack = new ApiGatewayStack(app, 'ApiGatewayStack', {});
 const S3Stack = new AssetsStack(app, 'AssetsS3Stack', {});

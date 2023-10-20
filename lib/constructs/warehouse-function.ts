@@ -5,8 +5,10 @@ import { AttributeType, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { EventBus } from 'aws-cdk-lib/aws-events';
+import { EventBus , Rule} from 'aws-cdk-lib/aws-events';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
 
 export class WarehouseFunction extends Construct {
@@ -18,6 +20,16 @@ export class WarehouseFunction extends Construct {
     const warehouseTablePrimaryKey = 'WarehouseId';
     const warehouseQueue = new sqs.Queue(this, 'OrderQueue');
 
+    const rule = new Rule(this, 'rule', {
+      eventPattern: {
+        detail: {
+          "status": ["order_started","payment_failed"]
+        }
+      },
+      eventBus
+    });
+    rule.addTarget(new targets.SqsQueue(warehouseQueue));
+    
     const warehouseTable = new Table(this, 'WarehouseTable', {
       partitionKey: { name: warehouseTablePrimaryKey, type: AttributeType.STRING },
       tableName: 'WarehouseTable',
@@ -49,6 +61,15 @@ export class WarehouseFunction extends Construct {
       entry: join(__dirname, '../../lambda/warehouse_functions', 'edit.ts'),
       ...nodeJsFunctionProps,
     });
+    const processWarehouseLambda = new NodejsFunction(this, 'processWarehouseFunction', {
+      entry: join(__dirname, '../../lambda/warehouse_functions', 'list.ts'),
+      ...nodeJsFunctionProps,
+    });
+    // const deleteOrderLambda = new NodejsFunction(this, 'DeleteOrderFunction', {
+    //   entry: join(__dirname, '../order_functions', 'delete.ts'),
+    //   ...nodeJsFunctionProps,
+    // });
+    processWarehouseLambda.addEventSource(new lambdaEventSources.SqsEventSource(warehouseQueue));
 
     warehouseTable.grantReadWriteData(createWarehouseLambda);
     warehouseTable.grantReadWriteData(getWarehouseLambda);
