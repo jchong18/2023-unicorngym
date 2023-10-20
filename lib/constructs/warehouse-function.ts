@@ -10,7 +10,6 @@ import * as sqs from 'aws-cdk-lib/aws-sqs';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 
-
 export class WarehouseFunction extends Construct {
   restApi: RestApi;
 
@@ -18,12 +17,11 @@ export class WarehouseFunction extends Construct {
     super(scope, id);
 
     const warehouseTablePrimaryKey = 'WarehouseId';
-    const warehouseQueue = new sqs.Queue(this, 'OrderQueue');
-
+    const warehouseQueue = new sqs.Queue(this, 'WarehouseQueue');
     const rule = new Rule(this, 'rule', {
       eventPattern: {
         detail: {
-          "status": ["order_started","payment_failed"]
+          'status': ['order_started', 'payment_failed'],
         }
       },
       eventBus
@@ -45,6 +43,7 @@ export class WarehouseFunction extends Construct {
       environment: {
         PRIMARY_KEY: warehouseTablePrimaryKey,
         TABLE_NAME: warehouseTable.tableName,
+        EVENT_BUS_NAME: eventBus.eventBusName,
       },
       runtime: Runtime.NODEJS_16_X,
     }
@@ -61,8 +60,8 @@ export class WarehouseFunction extends Construct {
       entry: join(__dirname, '../../lambda/warehouse_functions', 'edit.ts'),
       ...nodeJsFunctionProps,
     });
-    const processWarehouseLambda = new NodejsFunction(this, 'processWarehouseFunction', {
-      entry: join(__dirname, '../../lambda/warehouse_functions', 'list.ts'),
+    const processWarehouseLambda = new NodejsFunction(this, 'ProcessWarehouseFunction', {
+      entry: join(__dirname, '../../lambda/warehouse_functions', 'process.ts'),
       ...nodeJsFunctionProps,
     });
     // const deleteOrderLambda = new NodejsFunction(this, 'DeleteOrderFunction', {
@@ -78,6 +77,8 @@ export class WarehouseFunction extends Construct {
     const createWarehouseIntegration = new LambdaIntegration(createWarehouseLambda);
     const getWarehouseIntegration = new LambdaIntegration(getWarehouseLambda);
     const editWarehouseIntegration = new LambdaIntegration(editWarehouseLambda);
+
+    eventBus.grantPutEventsTo(processWarehouseLambda);
 
     const warehouse = restApi.root.addResource('warehouse');
     warehouse.addMethod('POST', createWarehouseIntegration);

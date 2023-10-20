@@ -1,4 +1,3 @@
-import { RemovalPolicy } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { EventBus ,Rule } from 'aws-cdk-lib/aws-events';
@@ -9,14 +8,13 @@ import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { join } from 'path';
 import { Cors, LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
 
-
 export class PaymentFunction extends Construct {
   restApi: RestApi;
 
   constructor(scope: Construct, id: string, restApi: RestApi, eventBus: EventBus) {
     super(scope, id);
 
-    const PaymentQueue = new sqs.Queue(this, 'PaymentQueue');
+    const paymentQueue = new sqs.Queue(this, 'PaymentQueue');
     const rule = new Rule(this, 'rule', {
       eventPattern: {
         detail: {
@@ -25,7 +23,7 @@ export class PaymentFunction extends Construct {
       },
       eventBus
     });
-    rule.addTarget(new targets.SqsQueue(PaymentQueue));
+    rule.addTarget(new targets.SqsQueue(paymentQueue));
 
     const nodeJsFunctionProps: NodejsFunctionProps = {
       bundling: {
@@ -49,7 +47,7 @@ export class PaymentFunction extends Construct {
       ...nodeJsFunctionProps,
     });
 
-    processPaymentLambda.addEventSource(new lambdaEventSources.SqsEventSource(PaymentQueue));
+    processPaymentLambda.addEventSource(new lambdaEventSources.SqsEventSource(paymentQueue));
 
     eventBus.grantPutEventsTo(processPaymentLambda);
 

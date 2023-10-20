@@ -13,9 +13,7 @@ export class ProductFunction extends Construct {
 
   constructor(scope: Construct, id: string, restApi: RestApi, eventBus:EventBus) {
     super(scope, id);
-
     const productTablePrimaryKey = 'ProductId';
-    const productQueue = new sqs.Queue(this, 'OrderQueue');
 
     const productTable = new Table(this, 'ProductTable', {
       partitionKey: { name: productTablePrimaryKey, type: AttributeType.STRING },
